@@ -11,24 +11,6 @@ const currency = env.CURRENCY || 'doge'
 const wolfbet = new Wolfbet(token)
 
 
-const getBalances = async () => {
-  const {user} = await wolfbet.getUser()
-  return user.balances
-}
-
-
-const getBalance = async currency => {
-  const balances = await getBalances()
-
-  for(let i=0; i < balances.length; i++) {
-    const balance = balances[i]
-    if(balance.currency === currency) return balance.amount
-  }
-
-  return null
-}
-
-
 const calcBaseAmount = (balance, increment, endurance) => balance * (1-increment)/(1-increment**endurance)
 const now = () => moment().format('h:mm:ss')
 
@@ -36,7 +18,7 @@ const now = () => moment().format('h:mm:ss')
 const main = async () => {
   const strategy = strategies[strategySelected]
   const {bet_value, increment, endurance, rule, multiplier} = strategy
-  let balance = await getBalance(currency)
+  let balance = await wolfbet.getBalance(currency)
   let dateBalance = moment()
   let baseAmount = calcBaseAmount(balance, increment, endurance)
 
@@ -52,7 +34,7 @@ const main = async () => {
 
       if(bet.state === 'win') {
         if(dateBalance.isBefore(moment().subtract(6, 'hours'))) { //each 6hours recalculate baseAmount
-          balance = await getBalance(currency)
+          balance = await wolfbet.getBalance(currency)
           baseAmount = calcBaseAmount(balance, increment, endurance)
           dateBalance = moment()
 	}
