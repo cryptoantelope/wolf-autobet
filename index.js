@@ -29,7 +29,7 @@ const main = async () => {
     const amount = baseAmount * increment ** looseInRow
 
     try {
-      const betResponse = await wolfbet.placeBet({currency, amount, bet_value, rule, multiplier})
+      const betResponse = await wolfbet.placeBet({currency, amount: amount.toFixed(8), bet_value, rule, multiplier})
       const {bet} = betResponse
 
       if(bet.state === 'win') {
