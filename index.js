@@ -3,12 +3,12 @@ const moment = require('moment')
 const {Wolfbet} = require('casinos')
 const config = require('./config')
 
-const {token, strategies} = config
+const {token, cookie, strategies} = config
 const strategySelected = env.STRATEGY || 50
 const currency = env.CURRENCY || 'doge'
 
 
-const wolfbet = new Wolfbet(token)
+const wolfbet = new Wolfbet(token, cookie)
 
 
 const calcBaseAmount = (balance, increment, endurance) => balance * (1-increment)/(1-increment**endurance)
